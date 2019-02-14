@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %} | Home {% endblock %}
+{% block content %}
+<!-- Showcase -->
+<section id="showcase">
+    <div class="container text-center">
+        <div class="home-search p-5">
+            <div class="overlay p-5">
+                <h1 class="display-4 mb-4">
+                    Move the way you want
+                </h1>
+                <p>&nbsp;</p>
+                <h2>Drive</h2>
+                <p>Drive when you want. Find opportunities around you.</p>
+                <p>&nbsp;</p>
+                <h2>Ride</h2>
+                <p>Get where you're headed.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<br>
+{% include 'partials/_alerts.html' %}
+<section id="services" class="py-5 bg-secondary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <i class="fas fa-user-circle fa-4x mr-4"></i>
+                <hr>
+                <h3>Ride Owner</h3>
+                <p>Register and login to request a ride and become the owner of the ride. Requesting
+                    a ride involves specifying a destination address, an estimated arrival time, the
+                    number of total passengers in your party, and optionally, a vehicle type and any
+                    other special requests.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-id-card fa-4x mr-4"></i>
+                <hr>
+                <h3>Driver</h3>
+                <p>Register and login to search for nearby open ride requests and claim the requests
+                    to start ride service. The required vehicle information for registration includes
+                    the type, license plate number, maximum number of passengers.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-users fa-4x mr-4"></i>
+                <hr>
+                <h3>Ride Sharer</h3>
+                <p>Register and login to search for existing open ride requests by specifying a destination, arrival
+                    window and number of passengers in your party. You can then become a ride sharer by joining that
+                    ride. </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

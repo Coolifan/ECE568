@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block title %} | Search results {% endblock %}
+{% block content %}
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">Available Open Ride Requests</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">
+                        <i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{% url 'claim' %}">Search</a></li>
+                <li class="breadcrumb-item active">Results</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Listings -->
+<section id="listings" class="py-4">
+    <div class="container">
+        <div class="row">
+            {% if rides %}
+            {% for ride in rides %}
+            {% if user.id != ride.owner_id and user.id != ride.sharer_id %}
+            <!-- Listing 1 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card listing-preview">
+                    <div class="card-img-overlay">
+                        <h2>
+                            <span class="badge badge-secondary text-white"></span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="listing-heading text-center">
+                            <h4 class="text-primary">{{ ride.arrival_time_owner }}</h4>
+                            <p>
+                                <i class="fas fa-map-marker text-secondary"></i> Destination: {{ ride.destination_owner }}</p>
+                        </div>
+                        <hr>
+                        <div class="row py-2 text-secondary">
+                                <div class="col-6">
+                                    <i class="fas fa-user-circle"></i> Owner: {{ ride.owner_name }}</div>
+                                {% if ride.sharer_id != 0 %}
+                                <div class="col-6">
+                                    <i class="fas fa-users"></i> Sharer: {{ ride.sharer_name }}
+                                </div>
+                                {% else %} {% endif %}
+                        </div>
+                        
+                        <div class="row py-2 text-secondary">
+                            <div class="col-6">
+                                <i class="fas fa-envelope"></i> Owner's email: {{ ride.owner_email }}
+                            </div>
+                            {% if ride.sharer_id != 0 %}                            
+                            <div class="col-6">
+                                <i class="fas fa-envelope"></i> Sharer's email: {{ ride.sharer_email }}
+                            </div>
+                            {% else %} {% endif %}
+                        </div>
+                    
+                        <div class="row py-2 text-secondary">
+                                <div class="col-6">
+                                    <i class="fas fa-user"></i> Passengers in owner's party: {{ ride.passengers_owner }}</div>
+                                {% if ride.sharer_id != 0 %}                                    
+                                <div class="col-6">
+                                    <i class="fas fa-user"></i> Passengers in sharer's party: {{ ride.passengers_sharer }}</div>
+                                {% else %} {% endif %}   
+                            </div>
+                        <hr>
+                        <div class="row py-2 text-secondary">
+                            <div class="col-12">
+                                <i class="fas fa-car"></i> Vehicle Type Requested: {{ ride.vehicle_type_requested }}</div>
+                            <div class="col-12">
+                                <i class="fas fa-question"></i> Special Request: {{ ride.special_requests_owner }}</div>
+                        </div>
+                        
+                        <hr>
+                        <a href="{% url 'ride' ride.id %}" class="btn btn-primary btn-block">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+                <form action="{% url 'driver_confirm_ride' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="ride_id" value="{{ ride.id }}">
+                    <input type="hidden" name="driver_id" value="{{ user.id }}">
+                    <input type="hidden" name="driver_name" value="{{ driver.name }}">
+                    <input type="hidden" name="driver_email" value="{{ driver.email }}">
+                    <input type="hidden" name="vehicle_type_registered" value="{{ driver.vehicle_type_registered }}">
+                    <input type="hidden" name="license_plate_number" value="{{ driver.license_plate_number }}">
+                    <input type="hidden" name="max_capacity" value="{{ driver.max_capacity }}">
+                    <input type="hidden" name="special_requests" value="{{ driver.special_requests }}">
+                    <input type="submit" value="Confirm this ride" class="btn btn-secondary btn-block">
+                </form> 
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <div class="col-md-12">
+                <p>No Rides Available</p>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {% if rides.has_other_pages %}
+                    <ul class="pagination">
+                        {% if rides.has_previous %}
+                            <li class="page-item">
+                                <a href="?page={{rides.previous_page_number}}" class="page-link">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link">&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for i in rides.paginator.page_range %}
+                            {% if rides.number == i %}
+                                <li class="page-item active">
+                                    <a class="page-link">{{i}}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a href="?page={{i}}" class="page-link">{{i}}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if rides.has_next %}
+                            <li class="page-item">
+                                <a href="?page={{rides.next_page_number}}" class="page-link">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

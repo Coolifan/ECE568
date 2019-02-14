@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block title %} | View Rides {% endblock %}
+{% block content %}
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">My upcoming rides as a rider</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">
+                        <i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item active"> View My Rides</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Listings -->
+<section id="listings" class="py-4">
+    <div class="container">
+        <div class="row">
+            {% if not user.is_authenticated %} <h1><a href="{% url 'login' %}">Login</a> to browse your upcoming rides</h1> {% endif %}
+            
+            {% if rides %}
+            {% for ride in rides %}
+            {% if user.id == ride.owner_id or user.id == ride.sharer_id %}
+            <!-- Listing 1 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card listing-preview">
+                    <div class="card-img-overlay">
+                        <h2>
+                            <span class="badge badge-secondary text-white"></span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="listing-heading text-center">
+                            <h4 class="text-primary">
+                                {% if user.id == ride.owner_id %}{{ ride.arrival_time_owner }} 
+                                {% elif user.id == ride.sharer_id %} {{ride.arrival_time_sharer }} {% endif %}
+                            </h4>
+                            <p>
+                                <i class="fas fa-map-marker text-secondary"></i> Destination: 
+                                {% if user.id == ride.owner_id %}{{ ride.destination_owner }} 
+                                {% elif user.id == ride.sharer_id %} {{ride.destination_sharer }} {% endif %}
+                            </p>
+                        </div>
+                        <hr>
+                        <div class="row py-2 text-secondary">
+                                <div class="col-6">
+                                    <i class="fas fa-user-circle"></i> Owner: {{ ride.owner_name }}</div>
+                                <div class="col-6">
+                                    <i class="fas fa-envelope"></i> Owner's email: {{ ride.owner_email }}</div>
+                            </div>
+                        <div class="row py-2 text-secondary">
+                            <div class="col-6">
+                                <i class="fas fa-id-card"></i> Driver: 
+                                {% if ride.driver_name %} {{ ride.driver_name }}
+                                {% else %} Pending {%endif%}
+                            </div>
+                            <div class="col-6">
+                                {% if ride.driver_email %} 
+                                <i class="fas fa-envelope"></i> Driver's email: {{ ride.driver_email }}
+                                {% else %} {%endif%}
+                            </div>
+                        </div>
+                        {% if ride.sharer_id != 0 or ride.is_shareable %}
+                        <div class="row py-2 text-secondary">
+                            <div class="col-6">
+                                <i class="fas fa-users"></i> Sharer: 
+                                {% if ride.sharer_name %} {{ ride.sharer_name }} 
+                                {% else %} Pending 
+                                {% endif %}
+                            </div>
+                            <div class="col-6">
+                                {% if ride.sharer_email %} 
+                                <i class="fas fa-envelope"></i> Sharer's email: {{ ride.sharer_email }}
+                                {% else %} {%endif%}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <hr>
+                        <div class="row py-2 text-secondary">
+                            <div class="col-12">
+                                {% if ride.vehicle_type_requested %}
+                                <i class="fas fa-user"></i> Vehicle Type Requested: {{ ride.vehicle_type_requested }}
+                                {% else %} {%endif%}
+                            </div>
+                            <div class="col-12">
+                                {% if ride.special_requests_owner %}
+                                <i class="fas fa-question"></i> Special Request: {{ ride.special_requests_owner }}
+                                {% else %} {%endif%}
+
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <a href="{% url 'ride' ride.id %}" class="btn btn-primary btn-block">
+                            {% if user.id == ride.owner_id or user.id == ride.sharer_id %}
+                            View / Edit ride request 
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <div class="col-md-12">
+                <p>No Rides Available</p>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {% if rides.has_other_pages %}
+                    <ul class="pagination">
+                        {% if rides.has_previous %}
+                            <li class="page-item">
+                                <a href="?page={{rides.previous_page_number}}" class="page-link">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link">&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for i in rides.paginator.page_range %}
+                            {% if rides.number == i %}
+                                <li class="page-item active">
+                                    <a class="page-link">{{i}}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a href="?page={{i}}" class="page-link">{{i}}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if rides.has_next %}
+                            <li class="page-item">
+                                <a href="?page={{rides.next_page_number}}" class="page-link">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+1/15/19: 
+Cross site request forgery (CSRF) is a type of attack that occurs when a malicious website contains a link, a form button or some JavaScript that is intended to perform some action on our website, using the credentials of a logged-in user who visits the malicious site in their brower. The CSRF middleware is activated by default in Django projects and csrf_token tag is included in all the templates that use a POST form.
+
+1/22/19:
+When filling out the required fields within a form, the date and time fields may encounter  bad inputs. Specifically, a user is able to enter a past timestamp, which does not make any sense in the real application. Additional frontend methods are needed to fetch the current time and set the earliest timestamp available to be the current time.
+Since there is no specifications about the relationships between the ride owner's arrival time and the sharer's arrival time, I assume that the date entered by the owner and the sharer must match, and there is no limitations on exact arrival time (HH:MM).
+
+2/1/19:
+Once a sharer's group has joined an open ride, the ride then will no longer accept further sharers to join, due to the configuration of the data models. This may seem unreasonable in real application. To solve this problem, the database needs to contain more columns.
+
+2/5/19: 
+Errors occur when the ride owner tries to modify the ride information after some sharers joined the ride. To my understanding, the ride owner should not be able to edit ride information either after the ride is confirmed by a driver or the ride is joined by some sharers. But if the sharer leaves the ride, the ride is now editable again for the owner. In real life, if I am a ride sharer, I don't want to see the ride owner change his mind after I join his ride since it is a waste of my time.

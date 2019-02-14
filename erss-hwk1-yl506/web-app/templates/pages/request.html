@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %} | Request a ride {% endblock %}
+{% block content %}
+<!-- Showcase -->
+<section id="showcase">
+    <div class="container text-center">
+        <div class="home-search p-5">
+            <div class="overlay p-5">
+                <h1 class="display-4 mb-4">
+                    Start a ride right now!
+                </h1>
+                <div class="search">
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'owner_request_ride' %}" method="POST">
+                        {% csrf_token %}
+                        <!-- Hidden inputs -->
+                        <input type="hidden" name="owner_first_name" value="{{ user.first_name }}">
+                        <input type="hidden" name="owner_last_name" value="{{ user.last_name }}">
+                        <input type="hidden" name="owner_id" value="{{ user.id }}">
+                        <input type="hidden" name="owner_email" value="{{ user.email }}">
+                        <!-- Form Row 1 -->
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">Destination Address</label>
+                                <input type="text" name="address" class="form-control"
+                                    placeholder="Destination Street Address" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">City</label>
+                                <input type="text" name="city" class="form-control" placeholder="City" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">State</label>
+                                <select name="state" class="form-control" required>
+                                    <option selected="true" disabled="disabled">State (All)</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <option value="AZ">Arizona</option>
+                                    <option value="AR">Arkansas</option>
+                                    <option value="CA">California</option>
+                                    <option value="CO">Colorado</option>
+                                    <option value="CT">Connecticut</option>
+                                    <option value="DE">Delaware</option>
+                                    <option value="DC">District Of Columbia</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="GA">Georgia</option>
+                                    <option value="HI">Hawaii</option>
+                                    <option value="ID">Idaho</option>
+                                    <option value="IL">Illinois</option>
+                                    <option value="IN">Indiana</option>
+                                    <option value="IA">Iowa</option>
+                                    <option value="KS">Kansas</option>
+                                    <option value="KY">Kentucky</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="ME">Maine</option>
+                                    <option value="MD">Maryland</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="MI">Michigan</option>
+                                    <option value="MN">Minnesota</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="MO">Missouri</option>
+                                    <option value="MT">Montana</option>
+                                    <option value="NE">Nebraska</option>
+                                    <option value="NV">Nevada</option>
+                                    <option value="NH">New Hampshire</option>
+                                    <option value="NJ">New Jersey</option>
+                                    <option value="NM">New Mexico</option>
+                                    <option value="NY">New York</option>
+                                    <option value="NC">North Carolina</option>
+                                    <option value="ND">North Dakota</option>
+                                    <option value="OH">Ohio</option>
+                                    <option value="OK">Oklahoma</option>
+                                    <option value="OR">Oregon</option>
+                                    <option value="PA">Pennsylvania</option>
+                                    <option value="RI">Rhode Island</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="SD">South Dakota</option>
+                                    <option value="TN">Tennessee</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="UT">Utah</option>
+                                    <option value="VT">Vermont</option>
+                                    <option value="VA">Virginia</option>
+                                    <option value="WA">Washington</option>
+                                    <option value="WV">West Virginia</option>
+                                    <option value="WI">Wisconsin</option>
+                                    <option value="WY">Wyoming</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Form Row 2 -->
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">Passengers</label>
+                                <select name="passengers_owner" class="form-control" required>
+                                    <option selected="true" disabled="disabled">Total number of passengers</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">Arrival Date</label>
+                                <input type="date" name="arrival_date" class="form-control" min="2019-02-14" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">Arrival Time</label>
+                                <input type="time" name="arrival_time" class="form-control" required>
+                            </div>
+                        </div>
+                        <!-- Form Row 3 -->
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" name="is_shareable" id="is_shareable">
+                                <label for="is_shareable">This ride is shareable</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">Vehicle Type</label>
+                                <input type="text" name="vehicle_type_requested" class="form-control"
+                                    placeholder="Vehicle Type (optional)">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="sr-only">State</label>
+                                <select name="special_requests_owner" class="form-control">
+                                    <option selected="true" disabled="disabled">Special Request (optional)</option>
+                                    <option value="Neat and Tidy">Neat and Tidy</option>
+                                    <option value="Awesome Music">Awesome Music</option>
+                                    <option value="Cool Car">Cool Car</option>
+                                    <option value="Entertaining Driver">Entertaining Driver</option>
+                                    <option value="Expert Navigation">Expert Navigation</option>
+                                    <option value="Great Conversation">Great Conversation</option>
+                                    <option value="Great Amenities">Great Amenities</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-block mt-4" type="submit">Submit request</button>
+                    </form>
+                    {% else %}
+                    <hr>
+                    <br>
+                    <h3><a href="{% url 'login' %}">Login</a> to submit a ride request</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'partials/_alerts.html' %}
+{% endblock %}

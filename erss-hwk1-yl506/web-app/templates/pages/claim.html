@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} | Search and claim a ride{% endblock %}
+{% block content %}
+<!-- Showcase -->
+<section id="showcase">
+    <div class="container text-center">
+        <div class="home-search p-5">
+            <div class="overlay p-5">
+                <h1 class="display-4 mb-4">
+                    Search and claim a ride to start service
+                </h1>
+                <hr>
+                {% if user.is_authenticated and is_driver %}
+                <div class="search">
+                    <form action="{% url 'driver_search_ride' %}">
+                        <button class="btn btn-secondary btn-block mt-4" type="submit">Find open ride requests</button>
+                    </form>
+                </div>
+                {% elif user.is_authenticated and not is_driver %}
+                <h2><a href="{% url 'dashboard' %}">Register</a> now to become a driver</h2>
+                {% else %}
+                <h3><a href="{% url 'login' %}">Login</a> now to search for open ride requests and claim a ride request</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
