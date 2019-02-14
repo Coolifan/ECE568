@@ -2,7 +2,6 @@
 ## Yifan Li, yl506
 
 ### PREFACE:
-Sorry for the late submission (due to some personal matters). I had met with Prof. Rogers and got a 1-week extension for this homework. Thanks for your understanding and your time to grade my homework.
 
 To run the app: 
 1. Clone the repo, `git clone https://gitlab.oit.duke.edu/yl506/erss-hwk1-yl506.git`
