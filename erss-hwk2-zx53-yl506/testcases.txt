@@ -1,0 +1,27 @@
+During our testing phase, we mainly used some networking API testing tools such as Insomnia and Postman instead of normal web browsers to test our proxy, since web browsers sometimes send unrelated requests in the background and cache web pages locally, and these actions are troublesome unless we are sure that we disabled these actions.
+
+Sometime, it might take longer to access a web page via proxy, we appreciate your patience.
+
+Here is a sample list of pages we tested on, along with some comments. Note that we initialized the cache size to be 100. You can modify this in main() when initializing Proxy(). For example, if you set cache size to be 1 and perform the following actions:
+
+
+GET http://people.duke.edu/~bmr23/ece568/class.html		
+(normal http GET, cache miss, and update cache)
+
+GET (CONNECT) https://www.wikipedia.org/
+(https GET, cache miss, previous web page got popped to make space for the new web page)
+
+GET (CONNECT) https://www.wikipedia.org/
+(cache hit, revalidate and responding)
+
+POST http://ptsv2.com/t/ece-568/post
+
+GET (CONNECT) http://www.httpwatch.com/httpgallery/chunked/chunkedimage.aspx
+(chunked image data, both http and https work fine)
+
+GET (CONNECT) https://www.youtube.com/watch?v=jrtEZQe7nyU&list=PLPJHaLcNCQ3Z15EifZBrNcybnckVV02X2&index=2&t=0s
+(Large website and data flow. We managed to watch a video on YouTube with 1080p resolution smoothly, but sometimes it might be unstable. Please restart our proxy if you manage to “freeze” our proxy with a good test case. Thanks for your patience!)
+
+
+
+
