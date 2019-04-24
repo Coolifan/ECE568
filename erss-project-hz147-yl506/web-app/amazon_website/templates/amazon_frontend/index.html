@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">Welcome to mini Amazon</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Alerts -->
+{% include 'amazon_frontend/alerts.html' %}
+
+<!-- Product list with search bar -->
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for product names or descriptions">
+
+<div class="container">
+    <form class="form-horizontal" action="{% url 'buy' %}" method="POST">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Count</th>
+                </tr>
+            </thead>
+            <tbody id="myTableBody">
+                {% for product in all_products %}
+                <tr>
+                    <th scope="row">{{product.id}}</th>
+                    <td>{{product.name}}</td>
+                    <td>{{product.description}}</td>
+                    <td>
+                        <input class="form-control" name="{{ product.id }}" type="number" value=0 min="0" max="100"
+                            id="formGroupInputLarge" placeholder="1-100" required>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="formGroupInputLarge">Shipping address</label>
+                <div class="col-md-2">
+                    <label class="col-md-2 control-label" for="x">x coordinate</label>
+                    <input class="form-control" name="x" type="number" id="formGroupInputLarge" placeholder="int"
+                        required>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="col-md-2 control-label" for="y">y coordinate</label>
+                    <input class="form-control" name="y" type="number" id="formGroupInputLarge" placeholder="int"
+                        required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="formGroupInputLarge">UPS Account</label>
+                <div class="col-md-2">
+                    <input class="form-control" name="ups_account" type="text" value="" id="formGroupInputLarge"
+                        placeholder="UPS Account">
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-md-2 control-label" for="formGroupInputLarge">Email Address</label>
+                <div class="col-md-2">
+                    <input class="form-control" name="email" type="text" value="" id="formGroupInputLarge"
+                        placeholder="Email">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Buy</button>
+        <button type="button" class="btn btn-danger" onclick="clearCart()">Clear Cart</button>
+    </form>
+    
+</div>
+
+{% endblock content %}
+
+
+{% block js %}
+<script>
+    function myFunction() {
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase(); // input keyword
+        tableBody = document.getElementById("myTableBody");
+        trs = tableBody.getElementsByTagName("tr");
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i]
+            tds = tr.getElementsByTagName("td");
+            name = tds[0].textContent || tds[0].innerText;
+            description = tds[0].textContent || tds[1].innerText;
+
+            if (name.toUpperCase().indexOf(filter) > -1 || description.toUpperCase().indexOf(filter) > -1) {
+                // If name or description contains input keywords, case insensitive
+                tr.style.display = "";
+            } else {
+                tr.style.display = "none";
+            }
+        }
+    }
+
+    function clearCart() {
+        tableBody = document.getElementById("myTableBody");
+        trs = tableBody.getElementsByTagName("tr");
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            tds = tr.getElementsByTagName("td");
+            td = tds[2];
+            input = td.getElementsByTagName("input")[0];
+            input.value = 0;
+        }
+    }
+</script>
+{% endblock js %}

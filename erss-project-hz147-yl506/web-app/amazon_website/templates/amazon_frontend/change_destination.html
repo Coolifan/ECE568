@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form class="form-horizontal" action="{% url 'change_destination' %}" method="POST">
+    {% csrf_token %}
+
+    <!-- Alerts -->
+    {% include 'amazon_frontend/alerts.html' %}
+
+
+    <div class="row form-group">
+        <div class="col-md-4 custom-control-inline">
+            <label class="col-md-6 control-label" for="formGroupInputLarge">Order ID</label>
+            <input class="form-control col-md-6" name="order_id" type="number" value="" id="formGroupInputLarge" min="1"
+                placeholder="Order ID" required>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-md-4 custom-control-inline">
+            <label class="col-md-6 control-label" for="x">New x coordinate</label>
+            <input class="form-control col-md-6" name="x" type="number" id="formGroupInputLarge" placeholder="int"
+                required>
+        </div>
+
+        <div class="col-md-4 custom-control-inline">
+            <label class="col-md-6 control-label" for="y">New y coordinate</label>
+            <input class="form-control col-md-6" name="y" type="number" id="formGroupInputLarge" placeholder="int"
+                required>
+        </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-success">Confirm changes</button>
+</form>
+
+{% endblock content %}

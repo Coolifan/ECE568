@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form class="form-horizontal" action="{% url 'query' %}" method="POST">
+    {% csrf_token %}
+
+    <!-- Alerts -->
+    {% include 'amazon_frontend/alerts.html' %}
+
+    <div class="form-group">
+        <div class="row">
+            <label class="col-md-2 control-label" for="formGroupInputLarge">Query Order Status</label>
+            <div class="col-md-2">
+                <input class="form-control" name="order_id" type="number" value="" min="1" id="formGroupInputLarge"
+                    placeholder="Order ID" required>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Query</button>
+</form>
+
+
+{% if order %}
+<table class="table table-sm table-dark table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Status</th>
+            <th scope="col">Tracking Number</th>
+            <th scope="col">UPS Account</th>
+            <th scope="col">Shipping Address</th>
+            <th scope="col">Total Price</th>
+            <th scope="col">Time Created</th>
+            <th scope="col">Time Packed</th>
+            <th scope="col">Time Loaded</th>
+            <th scope="col">Time Delivered</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">{{order.id}}</th>
+            <td>{{order.status}}</td>
+            <td>{{order.tracking_number}}</td>
+            <td>{{order.ups_account}}</td>
+            <td>({{order.destination_x}}, {{order.destination_y}})</td>
+            <td>${{order.price}}</td>
+            <td>{{order.time_created}}</td>
+            <td>{{order.time_packed}}</td>
+            <td>{{order.time_loaded}}</td>
+            <td>{{order.time_delivered}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock content %}

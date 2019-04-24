@@ -1,0 +1,23 @@
+/* Amazon <-> Webapp protocol */
+
+syntax = "proto2";
+
+message request_buy {
+    required int64 order_id = 1;
+}
+
+message request_cancel {
+    required int64 order_id = 1;
+}
+
+message request_change_delivery_address {
+    required int64 order_id = 1;
+    required int32 new_destination_x = 2;
+    required int32 new_destination_y = 3;
+}
+
+message WACommands {
+    optional request_buy buy = 1;
+    optional request_cancel cancel = 2;
+    optional request_change_delivery_address change_destination = 3;
+}

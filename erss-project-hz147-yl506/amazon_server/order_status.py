@@ -1,0 +1,8 @@
+PURCHASING = 'purchasing'
+PACKING = 'packing'
+PACKED = 'packed'
+LOADING = 'loading'
+LOADED = 'loaded'
+DELIVERING = 'delivering' 
+DELIVERED = 'delivered'
+CANCELED = 'canceled'

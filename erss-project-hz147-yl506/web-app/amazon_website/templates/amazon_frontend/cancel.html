@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form class="form-horizontal" action="{% url 'cancel' %}" method="POST">
+    {% csrf_token %}
+
+    <!-- Alerts -->
+    {% include 'amazon_frontend/alerts.html' %}
+
+    <div class="form-group">
+        <div class="row">
+            <label class="col-md-2 control-label" for="formGroupInputLarge">Cancel Order</label>
+            <div class="col-md-2">
+                <input class="form-control" name="order_id" type="number" value="" min="1" id="formGroupInputLarge"
+                    placeholder="Order ID" required>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Cancel</button>
+</form>
+
+{% endblock content %}

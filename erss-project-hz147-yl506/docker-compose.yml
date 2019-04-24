@@ -1,0 +1,49 @@
+version: '2'
+
+services:
+  db:
+      image: postgres
+      environment:
+           POSTGRES_DB: postgres
+           POSTGRES_USER: postgres
+           POSTGRES_PASSWORD: 123456
+      volumes:
+            - data-volume:/var/lib/postgresql/data
+      ports:
+            - "5432:5432"
+
+  amazon_server:
+      build: ./amazon_server
+      volumes:
+          - "./amazon_server:/amazon_server"
+      ports:
+          - "45678:45678"
+      tty: true
+      depends_on:
+          - db
+      command: bash -c "python server.py"
+
+  web:
+      build: ./web-app
+      user: root      
+      command: bash -c "cd amazon_website && cp amazon_frontend/views_for_migrate.py amazon_frontend/views.py && python manage.py makemigrations && python manage.py migrate && python ./amazon_frontend/db_initialization.py && cp ./amazon_frontend/views_for_run.py ./amazon_frontend/views.py && python manage.py runserver 0.0.0.0:8000"
+      volumes:
+        - ./web-app:/code
+      expose:
+        - "8000"
+      ports:
+        - "587:587"
+      depends_on:
+        - db
+        
+  nginx:
+      image: nginx:latest
+      ports:
+          - "8000:8000"
+      volumes:
+          - ./web-app/nginx/config:/etc/nginx/conf.d
+      depends_on:
+          - web
+        
+volumes:
+   data-volume: 
